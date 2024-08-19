@@ -5,6 +5,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
+import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type FormValues = {
   email: string;
@@ -12,6 +14,11 @@ type FormValues = {
 };
 
 const SignIn = () => {
+  const { data: session } = useSession();
+
+  if (session) {
+    redirect("/mainpage");
+  }
   const {
     register,
     handleSubmit,

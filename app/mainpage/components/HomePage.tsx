@@ -39,7 +39,7 @@ interface Job {
   totalReviews: number;
 }
 
-export default function Homp() {
+export default function HomePage() {
   const { data: session } = useSession();
 
   if (!session) {

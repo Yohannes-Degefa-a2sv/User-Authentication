@@ -31,7 +31,7 @@ export const authOptions: NextAuthOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials) => {
+      authorize: async (credentials, req) => {
         try {
           const res = await fetch("https://akil-backend.onrender.com/login", {
             method: "POST",
