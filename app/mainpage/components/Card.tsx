@@ -4,6 +4,7 @@ interface JobCardProps {
   location: string;
   description: string;
   imageUrl: string;
+  company: string;
 }
 
 const JobCard: React.FC<JobCardProps> = ({
@@ -12,33 +13,46 @@ const JobCard: React.FC<JobCardProps> = ({
   location,
   description,
   imageUrl,
+  company,
 }) => {
   return (
-    <div className="card border p-4 rounded-lg shadow-lg bg-gray-50">
-      <div className="w-[98%] md:w-[100%] mx-auto">
+    <div className="relative flex flex-wrap  justify-start mb-4 mr-4  p-5 bg-white border border-transparent rounded-lg shadow-lg hover:shadow-2xl hover:border-gray-300 hover:bg-gray-50 transition-all duration-300  mb-4">
+      <div className="flex flex-wrap">
         <img
           src={imageUrl}
           alt={title}
-          width={100}
-          height={100}
-          className="rounded-lg"
+          width={80}
+          height={80}
+          className="rounded-lg mr-4"
         />
-        <div className="ml-4">
-          <h3 className="text-2xl font-semibold text-[#25324B]">{title}</h3>
-          <p className="text-gray-600">{location}</p>
+        <div>
+          <p className="text-[#25324B] font-epilogue text-[24px] font-semibold leading-[24px]">
+            {title}
+          </p>
+          <div className="flex items-center text-[#7C8493] font-light text-lg">
+            <span>{company}</span>
+            <span className="mx-2">•</span>
+            <span>{location}</span>
+          </div>
         </div>
       </div>
-      <p className="mt-2 text-gray-700">{description}</p>
-      <div className="mt-4 flex space-x-2">
-        <button className="bg-[#EFFAF7] text-[#56CDAD]  py-1 px-3 rounded-full">
-          In-person
-        </button>
-        <button className="bg-white text-[#FFB836] border border-[#FFB836] py-1 px-3 rounded-full">
-          Education
-        </button>
-        <button className="bg-white text-[#615EAA] border border-[#615EAA] py-1 px-3 rounded-full">
-          IT
-        </button>
+      <div className="mt-4">
+        <p className="font-epilogue text-base font-normal leading-[25.6px]">
+          {description}
+        </p>
+        <div className="sm:w-[246px] h-[35px] flex grid-cols-3 gap-2 mt-3">
+          <div className="border-r-2">
+            <div className="bg-emerald-100 w-[96px] h-[41px] rounded-[80px] px-[10px] py-[6px] text-[#56CDAD] flex items-center justify-center">
+              In Person
+            </div>
+          </div>
+          <div className="border border-[#FFB836] w-[91px] h-[41px] text-[#FFB836] rounded-[80px] px-[10px] py-[6px]  flex items-center justify-center">
+            Education
+          </div>
+          <div className="border border-[#4640DE] w-[70px] h-[41px] rounded-[80px] px-[10px] py-[6px] text-[#000000] flex items-center justify-center  bg-white">
+            IT
+          </div>
+        </div>
       </div>
     </div>
   );

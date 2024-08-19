@@ -44,8 +44,9 @@ export const authOptions: NextAuthOptions = {
             }),
           });
           const user: User | null = await res.json();
-
+          console.log(user, "1234567890");
           if (res.ok && user) {
+            console.log("random");
             return user;
           } else {
             return null;
@@ -79,6 +80,7 @@ export const authOptions: NextAuthOptions = {
         };
         session.user.accessToken = token.accessToken as string;
       }
+      console.log("another one");
       return session;
     },
   },

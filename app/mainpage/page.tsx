@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Roboto } from "next/font/google";
-import JobList from "./components/HomePage";
+import HomePage from "./components/HomePage";
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -8,7 +8,7 @@ const roboto = Roboto({
 export default function Home() {
   return (
     <main className="roboto.className">
-      <JobList />
+      <HomePage />
     </main>
   );
 }

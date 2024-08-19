@@ -3,10 +3,10 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 
-type FormData = {
+type FormValues = {
   email: string;
   password: string;
 };
@@ -16,12 +16,11 @@ const SignIn = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
-  const searchParams = useSearchParams();
+  } = useForm<FormValues>();
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
-    const authResult = await signIn("credentials", {
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const authResult = await signIn("Credentials", {
       redirect: false,
       email: data.email,
       password: data.password,
@@ -29,7 +28,7 @@ const SignIn = () => {
     });
 
     if (authResult?.ok) {
-      router.push(authResult.url || "/mainpage");
+      router.push("/mainpage");
     } else {
       console.error("Sign in with next-auth failed", authResult?.error);
     }
@@ -46,7 +45,9 @@ const SignIn = () => {
           className="flex items-center justify-center w-full py-2 mb-6 border border-gray-300 rounded-lg hover:bg-gray-100"
           onClick={() => signIn("google", { callbackUrl: "/" })}
         >
-          <FcGoogle className="mr-3" size={28} />
+          <div className="mr-3">
+            <FcGoogle size={28} />
+          </div>
           <span className="text-black">Sign In with Google</span>
         </button>
 
@@ -70,7 +71,6 @@ const SignIn = () => {
               placeholder="Enter email address"
               type="email"
               className="text-black w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-2">
@@ -92,7 +92,6 @@ const SignIn = () => {
               type="password"
               className="text-black w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter password"
-              required
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-2">

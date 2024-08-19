@@ -2,7 +2,9 @@
 import React, { useEffect, useState } from "react";
 import JobCard from "./Card";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
+import { redirect } from "next/navigation";
 interface Job {
   id: string;
   title: string;
@@ -37,7 +39,13 @@ interface Job {
   totalReviews: number;
 }
 
-export default function JobList() {
+export default function Homp() {
+  const { data: session } = useSession();
+
+  if (!session) {
+    redirect("/signin");
+  }
+  console.log("session", session);
   const [jobData, setJobData] = useState<Job[]>([]);
 
   useEffect(() => {
@@ -62,39 +70,42 @@ export default function JobList() {
 
   return (
     <main className="min-h-screen px-20 py-10 bg-white">
-      <div className="mb-6">
-        <div className="flex justify-center items-center gap-5 my-4 w-full">
-          <div>
-            <h1 className="text-3xl font-bold">Opportunities</h1>
-            <p className="text-gray-600">Showing {jobData.length} results</p>
-          </div>
-          <div className="flex items-center ml-auto">
-            <span className="mr-2">Sort by:</span>
-            <select className="border rounded p-1 font-bold">
-              <option>Most Relevant</option>
-              <option>Latest</option>
-            </select>
+      <div className="relative top-[50px] left-[450px]  w-[900px] h-[700px]">
+        <div className="mb-6">
+          <div className="flex justify-center items-center gap-5 my-4 w-full">
+            <div>
+              <h1 className="text-3xl font-bold">Opportunities</h1>
+              <p className="text-gray-600">Showing {jobData.length} results</p>
+            </div>
+            <div className="flex items-center ml-auto">
+              <span className="mr-2">Sort by:</span>
+              <select className="border rounded p-1 font-bold">
+                <option>Most Relevant</option>
+                <option>Latest</option>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="flex flex-col gap-6 mx-auto max-w-4xl">
-        {jobData.map((job) => (
-          <ul key={job.id}>
-            <Link href={`/mainpage/jobDetail/${job.id}`} legacyBehavior>
-              <li>
-                <a className="my-5">
-                  <JobCard
-                    id={parseInt(job.id)}
-                    title={job.title}
-                    location={job.location.join(", ")}
-                    description={job.description}
-                    imageUrl={job.logoUrl}
-                  />
-                </a>
-              </li>
-            </Link>
-          </ul>
-        ))}
+        <div className="flex flex-col justify-start">
+          {jobData.map((job) => (
+            <ul key={job.id}>
+              <Link href={`/mainpage/jobDetail/${job.id}`} legacyBehavior>
+                <li>
+                  <a className="my-5">
+                    <JobCard
+                      id={parseInt(job.id)}
+                      title={job.title}
+                      location={job.location.join(", ")}
+                      description={job.description}
+                      imageUrl={job.logoUrl}
+                      company={job.orgName}
+                    />
+                  </a>
+                </li>
+              </Link>
+            </ul>
+          ))}
+        </div>
       </div>
     </main>
   );
