@@ -3,69 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { SiTicktick } from "react-icons/si";
-import { CiLocationOn, CiCirclePlus } from "react-icons/ci";
-import {
-  MdOutlineLocalFireDepartment,
-  MdOutlineDateRange,
-} from "react-icons/md";
 
-interface Job {
-  id: string;
-  title: string;
-  description: string;
-  responsibilities: string;
-  requirements: string;
-  idealCandidate: string;
-  categories: string[];
-  opType: "inPerson" | "remote";
-  startDate: string;
-  endDate: string;
-  deadline: string;
-  location: string[];
-  requiredSkills: string[];
-  whenAndWhere: string;
-  orgID: string;
-  datePosted: string;
-  status: "open" | "closed";
-  applicantsCount: number;
-  viewsCount: number;
-  orgName: string;
-  logoUrl: string;
-  isBookmarked: boolean;
-  isRolling: boolean;
-  questions: string | null;
-  perksAndBenefits: string | null;
-  createdAt: string;
-  updatedAt: string;
-  orgPrimaryPhone: string;
-  orgEmail: string;
-  averageRating: number;
-  totalReviews: number;
-}
-
-const formatDateToCustomString = (isoDateString: string): string => {
-  const date = new Date(isoDateString);
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  const day = date.getDate();
-  const monthIndex = date.getMonth();
-  const year = date.getFullYear();
-
-  return `${monthNames[monthIndex]} ${day} ${year}`;
-};
+import { JobProps as Job } from "@/app/Props/JobProps";
+import { dateFormate } from "@/app/Props/dateFormate";
 
 const JobDetailClient = () => {
   const { id } = useParams();
@@ -102,65 +42,71 @@ const JobDetailClient = () => {
   }
 
   return (
-    <div className="px-14 flex-col justify-between  bg-white shadow-lg rounded-lg my-16 w-full">
-      <h1 className="text-3xl font-bold mb-4 text-[#25324B]">{job.title}</h1>
-      <div className="flex flex-col md:flex-row gap-14">
-        <div className="md:w-3/4 pr-4">
-          <p className="text-gray-600 mb-4">{job.description}</p>
-          <h2 className="text-2xl font-bold mb-2 text-[#25324B]">
+    <div className="px-4 md:px-10 py-6 bg-white shadow-lg rounded-lg my-8 w-full h-full ">
+      <h1 className="text-3xl font-bold mb-6 text-[#25324B]">{job.title}</h1>
+      <div className="flex flex-col md:flex-row gap-12">
+        <div className="md:w-3/4 pr-6">
+          <p className="text-gray-600 mb-6">{job.description}</p>
+          <h2 className="text-2xl font-bold mb-4 text-[#25324B]">
             Responsibilities
           </h2>
-          <ul className="flex flex-col gap-2">
+          <ul className="space-y-3">
             {job.responsibilities?.split("\n").map((responsibility, index) => (
-              <li key={index} className="flex gap-2">
-                <SiTicktick className="text-[#56CDAD]" />
+              <li key={index} className="flex gap-3 items-start">
+                <img src="/tick.svg" alt="tick" className="w-10 h-10" />
                 <p className="text-start text-gray-600">{responsibility}</p>
               </li>
             ))}
           </ul>
-          <h2 className="text-2xl font-bold mb-2 text-[#25324B]">
+          <h2 className="text-2xl font-bold mt-8 mb-4 text-[#25324B]">
             Ideal Candidate
           </h2>
-          <div className="mb-4 text-gray-600">
+          <div className="mb-6 text-gray-600">
             <p>{job.idealCandidate}</p>
           </div>
-          <h2 className="text-2xl font-bold mb-2 inline-flex gap-2 text-[#25324B]">
-            <CiLocationOn />
+          <h2 className="text-2xl font-bold mt-8 mb-4 text-[#25324B] inline-flex gap-3 items-center">
+            <img src="/location.svg" alt="location" className="w-10 h-10" />
             When & Where
           </h2>
           <p className="mb-4 text-gray-600">{job.whenAndWhere}</p>
         </div>
-        <div className="md:w-1/4 pl-4 border-l border-gray-200">
-          <h2 className="text-2xl font-bold mb-2 text-[#25324B]">About</h2>
-          <p className="flex gap-2 text-gray-600">
-            <CiCirclePlus />
-            Posted On: {formatDateToCustomString(job.datePosted)}
+        <div className="md:w-1/4 pl-6 px-3 py-3 border-l border-gray-200">
+          <h2 className="text-2xl font-bold mb-4 text-[#25324B]">About</h2>
+          <p className="flex items-center gap-3 text-gray-600">
+            <img src="/post.svg" alt="post date" className="w-10 h-10" />
+            Posted On: {dateFormate(job.datePosted)}
           </p>
-          <p className="flex gap-2 text-gray-600">
-            <MdOutlineLocalFireDepartment />
-            Deadline: {formatDateToCustomString(job.deadline)}
+          <p className="flex items-center gap-3 text-gray-600">
+            <img
+              src="/deadline.png"
+              alt="deadline date"
+              className="w-10 h-10"
+            />
+            Deadline: {dateFormate(job.deadline)}
           </p>
-          <p className="flex gap-2 text-gray-600">
-            <CiLocationOn />
+          <p className="flex items-center gap-3 text-gray-600">
+            <img src="/location.svg" alt="location" className="w-10 h-10" />
             Location:{" "}
             {Array.isArray(job.location)
               ? job.location.join(", ")
               : "Not provided"}
           </p>
-          <p className="flex gap-2 text-gray-600">
-            <MdOutlineDateRange />
-            Start Date: {formatDateToCustomString(job.startDate)}
+          <p className="flex items-center gap-3 text-gray-600">
+            <img src="/start.svg" alt="start date" className="w-10 h-10" />
+            Start Date: {dateFormate(job.startDate)}
           </p>
-          <p className="flex gap-2 text-gray-600">
-            <MdOutlineDateRange />
-            End Date: {formatDateToCustomString(job.endDate)}
+          <p className="flex items-center gap-3 text-gray-600">
+            <img src="/end.svg" alt="end date" className="w-10 h-10" />
+            End Date: {dateFormate(job.endDate)}
           </p>
-          <h2 className="text-2xl font-bold mb-2 text-[#25324B]">Categories</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-4 text-[#25324B]">
+            Categories
+          </h2>
           {Array.isArray(job.categories) && job.categories.length > 0 ? (
             job.categories.map((category, index) => (
               <p
                 key={index}
-                className="mb-2 text-[#FFC663] bg-[#FDF3EB] py-1 px-3 rounded-full"
+                className="mb-2 text-[#FFC663] bg-[#FDF3EB] py-1 px-3 rounded-full text-center"
               >
                 {category}
               </p>
@@ -168,7 +114,7 @@ const JobDetailClient = () => {
           ) : (
             <p>No categories provided</p>
           )}
-          <h2 className="text-2xl font-bold mb-2 text-[#25324B]">
+          <h2 className="text-2xl font-bold mt-8 mb-4 text-[#25324B]">
             Required Skills
           </h2>
           {Array.isArray(job.requiredSkills) &&
@@ -176,7 +122,7 @@ const JobDetailClient = () => {
             job.requiredSkills.map((skill, index) => (
               <p
                 key={index}
-                className="mb-2 text-[#2D298E] bg-[#F8F8Fd] py-1 px-3 rounded-full"
+                className="mb-2 text-[#2D298E] bg-[#F8F8Fd] py-1 px-3 rounded-full text-center"
               >
                 {skill}
               </p>

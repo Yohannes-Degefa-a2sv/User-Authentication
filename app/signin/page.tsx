@@ -3,31 +3,25 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
-import { redirect } from "next/navigation";
-import { useSession } from "next-auth/react";
 
-type FormValues = {
+type FormData = {
   email: string;
   password: string;
 };
 
 const SignIn = () => {
-  const { data: session } = useSession();
-
-  if (session) {
-    redirect("/mainpage");
-  }
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<FormData>();
+  const searchParams = useSearchParams();
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const authResult = await signIn("Credentials", {
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const authResult = await signIn("credentials", {
       redirect: false,
       email: data.email,
       password: data.password,
@@ -35,7 +29,7 @@ const SignIn = () => {
     });
 
     if (authResult?.ok) {
-      router.push("/mainpage");
+      router.push(authResult.url || "/mainpage");
     } else {
       console.error("Sign in with next-auth failed", authResult?.error);
     }
@@ -44,23 +38,16 @@ const SignIn = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-2xl text-center text-[#25324B] mb-6 font-[700]">
+        <h1 className="text-3xl text-center text-[#25324B] mb-6 font-[700]">
           Welcome Back,
         </h1>
 
-        <button
-          className="flex items-center justify-center w-full py-2 mb-6 border border-gray-300 rounded-lg hover:bg-gray-100"
-          onClick={() => signIn("google", { callbackUrl: "/" })}
-        >
-          <div className="mr-3">
-            <FcGoogle size={28} />
-          </div>
-          <span className="text-black">Sign In with Google</span>
-        </button>
-
         <div className="flex items-center justify-center my-6">
           <span className="w-1/4 border-b border-gray-300"></span>
-          <span className="px-3 text-gray-500">Or Sign In with Email</span>
+          <span className="px-20 text-gray-500">
+            {" "}
+            {"                            "}
+          </span>
           <span className="w-1/4 border-b border-gray-300"></span>
         </div>
 
@@ -78,6 +65,7 @@ const SignIn = () => {
               placeholder="Enter email address"
               type="email"
               className="text-black w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-2">
@@ -99,6 +87,7 @@ const SignIn = () => {
               type="password"
               className="text-black w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter password"
+              required
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-2">
